@@ -13,6 +13,8 @@ export class PorPaisComponent {
   termino : string = 'Honduras';
   hayError: boolean = false;
   paises  : Country[] = [];
+  paisesSugeridos  : Country[] = [];
+  mostrarSugerencias: boolean = false;
 
   constructor(private paisService: PaisService) { }
 
@@ -34,9 +36,20 @@ export class PorPaisComponent {
 
   sugerencias( termino: string ){
     this.hayError = false;
-    this.buscar(termino);
+    this.termino = termino;
+    this.mostrarSugerencias = true;
+
+    this.paisService.buscarPais(termino)
+      .subscribe(
+        paises => this.paisesSugeridos = paises.splice(0,10),
+        (err) => this.paisesSugeridos = []
+      );
     // TODO crear sugerencias
 
+  }
+
+  buscarSugerido(termino: string){
+    this.buscar( termino );
   }
 
 }
